@@ -1,3 +1,4 @@
+import random
 import turtle
 import time
 
@@ -18,6 +19,21 @@ head.penup()
 head.goto(0, 0)
 head.direction = "stop"
 
+# Snake food
+food = turtle.Turtle()
+food.speed(0)
+food.shape("circle")
+food.color("red")
+food.penup()
+food.goto(0, 100)
+
+def move_food():
+    if head.distance(food) < 20:
+        x = random.randint(-390, 390)
+        y = random.randint(-390, 390)
+        food.goto(x, y)
+
+
 # Functions
 def go_up():
     head.direction = "up"
@@ -31,7 +47,7 @@ def go_left():
 def go_right():
     head.direction = "right"
 
-def move():
+def move_head():
     if head.direction == "up":
         y = head.ycor()
         head.sety(y + 20)
@@ -57,8 +73,9 @@ win.onkeypress(go_right, 'Right')
 # Main game loop
 while True:
     win.update()
+    move_food()
 
-    move()
+    move_head()
     time.sleep(delay)
 
 win.mainloop()
