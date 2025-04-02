@@ -13,11 +13,37 @@ win.tracer(0)
 # snake head
 head = turtle.Turtle()
 head.speed(0)
-head.shape("square")
+head.shape("circle")
 head.color("pink")
 head.penup()
 head.goto(0, 0)
 head.direction = "stop"
+
+# snake body
+segments = []
+
+def add_segment():
+    new_segment = turtle.Turtle()
+    new_segment.speed(0)
+    new_segment.shape("square")
+    new_segment.color("pink")
+    new_segment.penup()
+    segments.append(new_segment)
+
+def move_segment():
+    if head.direction != "stop":
+        # move the nth segment to n-1th coordinates
+        for i in range(len(segments)-1, 0, -1):
+            x = segments[i-1].xcor()
+            y = segments[i-1].ycor()
+            segments[i].goto(x, y)
+
+        # move the segment 0 where the head is
+        if len(segments) > 0:
+            x = head.xcor()
+            y = head.ycor()
+            segments[0].goto(x, y)
+    
 
 # Snake food
 food = turtle.Turtle()
@@ -32,6 +58,10 @@ def move_food():
         x = random.randint(-390, 390)
         y = random.randint(-390, 390)
         food.goto(x, y)
+
+        # add a segment
+        add_segment()
+
 
 
 # Functions
@@ -73,9 +103,18 @@ win.onkeypress(go_right, 'Right')
 # Main game loop
 while True:
     win.update()
+    # Check for collision
+    if  head.xcor() > 390 or head.xcor() < -390 or head.ycor() > 390 or head.ycor() < -390:
+        time.sleep(1)
+        head.goto(0, 0)
+        head.direction = "stop"
+        for segment in segments:
+            segment.hideturtle()
+        segments.clear()
     move_food()
-
+    move_segment()
     move_head()
+    
     time.sleep(delay)
 
 win.mainloop()
