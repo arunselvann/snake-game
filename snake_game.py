@@ -3,6 +3,8 @@ import turtle
 import time
 
 delay = 0.2
+score = [0]
+high_score = [0]
 
 win = turtle.Screen()
 win.title("Snake Game")
@@ -25,10 +27,17 @@ segments = []
 def add_segment():
     new_segment = turtle.Turtle()
     new_segment.speed(0)
-    new_segment.shape("square")
+    new_segment.shape("circle")
     new_segment.color("pink")
     new_segment.penup()
     segments.append(new_segment)
+
+    # Increse Score
+    score[0] += 1
+    if score[0] > high_score[0]:
+        high_score[0] = score[0]
+    pen.clear()
+    pen.write(f"Score: {score[0]} High Score: {high_score[0]}", align="center", font=("Courier", "24", "normal"))
 
 def move_segment():
     if head.direction != "stop":
@@ -61,6 +70,17 @@ def move_food():
 
         # add a segment
         add_segment()
+
+
+# Scoreboard
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape('square')
+pen.color('red')
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 360)
+pen.write("Score: 0 High Score: 0", align="center", font=("Courier", "24", "normal"))
 
 
 
@@ -115,6 +135,9 @@ while True:
         for segment in segments:
             segment.hideturtle()
         segments.clear()
+        score[0] = 0
+        pen.clear()
+        pen.write(f"Score: {score[0]} High Score: {high_score[0]}", align="center", font=("Courier", "24", "normal"))
     move_food()
     move_segment()
     move_head()
@@ -128,6 +151,9 @@ while True:
             for segment in segments:
                 segment.hideturtle()
             segments.clear()
+            score[0] = 0
+            pen.clear()
+            pen.write(f"Score: {score[0]} High Score: {high_score[0]}", align="center", font=("Courier", "24", "normal"))
     
     time.sleep(delay)
 
